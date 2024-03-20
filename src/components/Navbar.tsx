@@ -1,39 +1,28 @@
 import { NavLink } from "react-router-dom";
-
-const navItems = [
-  {
-    id: 1,
-    title: "Home",
-    href: "/",
-  },
-  {
-    id: 2,
-    title: "About",
-    href: "/about",
-  },
-  {
-    id: 3,
-    title: "Products",
-    href: "/products",
-  },
-  {
-    id: 4,
-    title: "Cart",
-    href: "/cart",
-  },
-  {
-    id: 5,
-    title: "Checkout",
-    href: "/checkout",
-  },
-  {
-    id: 6,
-    title: "Orders",
-    href: "/orders",
-  },
-];
+import { navItems } from "../utils/utils";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 function Navbar() {
+  const { selectData } = useSelector((store: RootState) => store.cart);
+  console.log(selectData);
+
+  const getThemeFromLocalStorage = () => {
+    return localStorage.getItem("theme") || "light";
+  };
+  const [theme, setTheme] = useState(getThemeFromLocalStorage());
+
+  const handleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+  };
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
   return (
     <div className="p-2 bg-base-200">
       <nav className="max-container flex justify-between items-center">
@@ -78,7 +67,7 @@ function Navbar() {
           </ul>
         </div>
         <div className="flex items-center">
-          <label className="swap swap-rotate btn btn-circle">
+          <label className="swap shadow-none swap-rotate btn btn-circle">
             {/* this hidden checkbox controls the state */}
             <input
               type="checkbox"
@@ -88,6 +77,7 @@ function Navbar() {
 
             {/* sun icon */}
             <svg
+              onClick={() => handleTheme()}
               className="swap-off fill-current w-[22px] h-[22px]"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -97,6 +87,7 @@ function Navbar() {
 
             {/* moon icon */}
             <svg
+              onClick={() => handleTheme()}
               className="swap-on fill-current w-[22px] h-[22px]"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -127,7 +118,9 @@ function Navbar() {
                       d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
                     />
                   </svg>
-                  <span className="badge badge-sm indicator-item">8</span>
+                  <span className="badge badge-sm indicator-item">
+                    {selectData?.length}
+                  </span>
                 </div>
               </NavLink>
             </div>

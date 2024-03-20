@@ -1,27 +1,79 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import FormInput from "../../components/FormInput";
+import { toast } from "sonner";
+import { useAppDispatch } from "../../redux/store";
+import { setUser } from "../../redux/user/userSlice";
+import { userData } from "../../interface/allinterface";
 
 function Register() {
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get("username") as string;
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+
+    const newUser = {
+      username,
+      email,
+      password,
+    };
+    if ((username && email && password).trim()) {
+      try {
+        const req = await fetch(
+          "https://strapi-store-server.onrender.com/api/auth/local/register",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newUser),
+          }
+        );
+
+        if (!req.ok) {
+          throw new Error("Email or Username are already taken");
+        }
+
+        const res: userData = await req.json();
+        setLoading(false);
+        dispatch(setUser(res));
+        toast.success("You have successfully registered");
+      } catch (error: any) {
+        setLoading(false);
+        toast.error(error.message);
+      }
+    } else {
+      toast.warning("Please enter information");
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="relative bg-base-100 flex flex-col justify-center min-h-screen overflow-hidden px-6">
       <div className="bg-base-100 p-6 m-auto rounded-md shadow-md max-w-[600px] w-full">
         <h1 className="text-center text-3xl font-bold">Sign up</h1>
-        <form className="mt-6">
+        <form onSubmit={handleSubmit} className="mt-6">
           <FormInput
             name="username"
+            disabled={loading}
             label="Username"
             placeholder="example: John"
             type="text"
           />
           <FormInput
+            disabled={loading}
             name="email"
             label="Email"
             placeholder="example@gmail.com"
             type="email"
           />
           <FormInput
+            disabled={loading}
             name="password"
             label="Password"
             placeholder="Password"
@@ -31,7 +83,8 @@ function Register() {
             {loading ? (
               <button
                 type="submit"
-                className="w-full uppercase btn-disabled btn btn-active btn-neutral"
+                disabled
+                className="w-full cursor-not-allowed uppercase btn btn-active btn-neutral"
               >
                 Sign up <span className="loading loading-spinner"></span>
               </button>
