@@ -46,3 +46,35 @@ export interface singleData {
   amount?: number;
   meta?: {};
 }
+
+export interface allData {
+  data: {
+    data: [
+      {
+        id: number;
+        attributes: {
+          title: string;
+          company: string;
+          description: string;
+          featured: false;
+          createdAt: string;
+          updatedAt: "2023-08-10T10:04:29.084Z";
+          publishedAt: string;
+          category: string;
+          image: string;
+          price: string;
+          shipping: true;
+          colors: string[];
+        };
+      }
+    ];
+    meta: {
+      pagination: {
+        page: number;
+        pageSize: number;
+        pageCount: number;
+        total: number;
+      };
+    };
+  };
+}

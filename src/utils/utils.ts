@@ -1,3 +1,4 @@
+import axios from "axios";
 export const navItems = [
   {
     id: 1,
@@ -50,10 +51,20 @@ export const imgs = [
   },
 ];
 
-import axios from "axios";
-
 const productionUrl = "https://strapi-store-server.onrender.com/api";
-
 export const customFetch = axios.create({
   baseURL: productionUrl,
 });
+
+export const formatPrice = (price: bigint | number) => {
+  if (typeof price === "number") {
+    const priceNumber = Number((price / 100).toFixed(2));
+    const dollarsAmount = new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(priceNumber);
+    return dollarsAmount;
+  } else {
+    return "Price cannot be formatted. Unsupported type.";
+  }
+};

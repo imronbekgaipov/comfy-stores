@@ -26,6 +26,8 @@ function SingleProduct() {
     }
   };
 
+  console.log(fetchedSingleData?.data.data.attributes.colors);
+
   return (
     <>
       {fetchedSingleData && (
@@ -51,7 +53,13 @@ function SingleProduct() {
               </p>
               <div className="flex items-center gap-x-1">
                 <p className="text-lg">Colors:</p>
-                <button className={`badge w-6 h-6`}>d</button>
+                {fetchedSingleData.data.data.attributes.colors.map((color) => (
+                  <button
+                    style={{ backgroundColor: color }}
+                    key={nanoid()}
+                    className={`badge w-6 h-6`}
+                  ></button>
+                ))}
               </div>
               <div className="grid gap-y-2">
                 <p>Amount</p>

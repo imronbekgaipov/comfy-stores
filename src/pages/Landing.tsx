@@ -23,7 +23,7 @@ function Landing() {
         <>
           <div className="grid grid-cols-2 mt-16 justify-between">
             <div>
-              <h2 className="text-6xl mt-9 font-medium opacity-65 tracking-wide">
+              <h2 className="text-6xl mt-9 font-bold opacity-65 tracking-wide">
                 We are changing the way people shop
               </h2>
               <p className="opacity-75 tracking-wide max-w-[450px] w-full my-8">
@@ -31,7 +31,10 @@ function Landing() {
                 Tempore repellat explicabo enim soluta temporibus asperiores aut
                 obcaecati perferendis porro nobis.
               </p>
-              <NavLink to={"/products"} className="uppercase btn btn-outline">
+              <NavLink
+                to={"/products"}
+                className="uppercase btn btn-info animation rounded-md bg-blue-600 px-2 py-1  text-white hover:bg-blue-700 md:px-3 md:py-2"
+              >
                 our products
               </NavLink>
             </div>
